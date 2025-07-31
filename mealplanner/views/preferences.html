@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Preferences – MealPlanner</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<header>
+  <a href="/dashboard.html" class="nav-brand">🥗 MealPlanner</a>
+  <nav>
+    <ul>
+      <li><a href="/preferences.html">Preferences</a></li>
+      <li><a href="/suggestions.html">Suggestions</a></li>
+      <li><a href="/generate.html">Generate</a></li>
+      <li><a href="/weekly.html">Weekly Plan</a></li>
+      <li><a href="/">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+<body>
+  <form class="preferences" method="POST" action="/api/preferences">
+    <h2>Dietary Preferences</h2>
+    <label for="preference">Your dietary goals or restrictions:</label>
+    <textarea name="preference" rows="5" required></textarea>
+
+    <input type="submit" value="Save Preferences" />
+    <p><a href="/dashboard.html">← Back to Dashboard</a></p>
+  </form>
+  <script src="/js/app.js"></script>
+</body>
+</html>
