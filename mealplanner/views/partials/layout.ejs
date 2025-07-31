@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || "MealPlanApp" %></title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">🥗 MealPlanApp</div>
+      <nav>
+        <ul>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/weekly">Meal Plans</a></li>
+          <li><a href="#">Grocery Lists</a></li>
+          <li><a href="/suggestions">Recipes</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main content wrapper -->
+    <div class="main-content">
+
+      <!-- Top Navigation Bar -->
+      <header class="topnav">
+        <input type="text" placeholder="Search recipes, meal plans, ingredients…" class="searchbar" />
+        <button class="btn-primary">New Plan</button>
+        <div class="user-badge">
+          👤 <%= user ? user.username : "Guest" %>
+        </div>
+      </header>
+
+      <!-- Page-specific content -->
+      <main class="content">
+        <%- body %>
+      </main>
+
+    </div>
+  </div>
+
+</body>
+</html>

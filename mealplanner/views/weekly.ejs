@@ -1,0 +1,19 @@
+<div class="container">
+  <h2>Your Weekly Plan</h2>
+
+  <table class="weekly-table">
+    <thead>
+      <tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th></tr>
+    </thead>
+    <tbody>
+      <% meals.forEach(meal => { %>
+        <tr>
+          <td><%= meal.day %></td>
+          <td><%= meal.breakfast %></td>
+          <td><%= meal.lunch %></td>
+          <td><%= meal.dinner %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

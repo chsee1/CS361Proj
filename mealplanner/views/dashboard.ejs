@@ -1,0 +1,67 @@
+<section class="welcome">
+  <% if (query.welcome === "true") { %>
+    <div class="success-banner">🎉 Account created successfully!</div>
+  <% } %>
+
+  <h2>Hi, <%= user.username %>!</h2>
+  <p>Welcome back to your meal planning dashboard.</p>
+</section>
+
+<section class="dashboard-content">
+
+  <!-- Top Row: Weekly Progress + Quick Actions -->
+  <div class="dashboard-top-row">
+    <!-- Weekly Progress -->
+    <div class="card">
+      <h3>Weekly Progress</h3>
+      <div class="progress-charts">
+        <div class="circle-chart">
+          <div class="circle-text"><%= user.stats.adherence %>%</div>
+          <div class="circle-label">Adherence</div>
+        </div>
+        <div class="circle-chart">
+          <div class="circle-text"><%= user.stats.nutrition %>%</div>
+          <div class="circle-label">Nutrition</div>
+        </div>
+      </div>
+
+      <div class="macro-grid">
+        <div><strong>Calories</strong><br><%= user.stats.calories.current %>/2000</div>
+        <div><strong>Protein</strong><br><%= user.stats.protein.current %>g</div>
+        <div><strong>Carbs</strong><br><%= user.stats.carbs.current %>g</div>
+        <div><strong>Fat</strong><br><%= user.stats.fat.current %>g</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <h3>Quick Actions</h3>
+      <div class="quick-actions">
+        <a href="/generate" class="btn-secondary">Generate Meal Plan</a>
+        <a href="/preferences" class="btn-secondary">Update Preferences</a>
+        <a href="/suggestions" class="btn-secondary">Browse Suggestions</a>
+        <a href="/weekly" class="btn-primary">View Weekly Plan</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's Meals -->
+  <div class="card todays-meals">
+    <div class="card-header">
+      <h3>Today's Meals</h3>
+      <span class="date-label">Wednesday, June 12</span>
+    </div>
+    <div class="meal-grid">
+    <% todaysMeals.forEach(meal => { %>
+      <div class="meal-card">
+        <small><%= meal.mealType %></small>
+        <img src="<%= meal.image %>" alt="<%= meal.title %>">
+        <h4><%= meal.title %></h4>
+        <p><%= meal.calories %> cal</p>
+        <p><%= meal.protein %> protein</p>
+      </div>
+    <% }) %>
+  </div>
+  </div>
+
+</section>

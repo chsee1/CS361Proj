@@ -1,0 +1,30 @@
+<div class="container generate-meal-plan">
+  <h2>Generate Meal Plan</h2>
+
+  <% if (success) { %>
+    <div class="success-banner">✅ Meal plan generated!</div>
+  <% } %>
+
+  <div class="generate-options">
+    <div class="card">
+      <h3>Include Meals</h3>
+      <label><input type="checkbox" name="type" /> Breakfast</label>
+      <label><input type="checkbox" name="type" /> Lunch</label>
+      <label><input type="checkbox" name="type" /> Dinner</label>
+    </div>
+
+    <div class="card">
+      <h3>Meal Tags</h3>
+      <label><input type="checkbox" name="tag" /> Quick Meals</label>
+      <label><input type="checkbox" name="tag" /> High Protein</label>
+      <label><input type="checkbox" name="tag" /> Budget-Friendly</label>
+    </div>
+  </div>
+
+  <div class="generate-actions">
+    <form method="POST" action="/generate">
+      <input type="hidden" name="confirm" value="yes">
+      <button type="submit" class="btn-primary">Generate Plan</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="container">
+  <h2>Your Dietary Preferences</h2>
+
+  <% if (saved) { %>
+    <div class="success-banner">✅ Preferences saved successfully</div>
+  <% } %>
+
+  <form method="POST" action="/api/preferences" class="preferences-form">
+    <fieldset>
+      <legend>Diet Types</legend>
+      <div class="grid-checkbox">
+        <label><input type="checkbox" name="diet[]" value="Vegetarian" /> Vegetarian</label>
+        <label><input type="checkbox" name="diet[]" value="Vegan" /> Vegan</label>
+        <label><input type="checkbox" name="diet[]" value="Low-Carb" /> Low-Carb</label>
+        <label><input type="checkbox" name="diet[]" value="Keto" /> Keto</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Allergies</legend>
+      <div class="grid-checkbox">
+        <label><input type="checkbox" name="allergy[]" value="Nuts" /> Nuts</label>
+        <label><input type="checkbox" name="allergy[]" value="Shellfish" /> Shellfish</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Calories</legend>
+      <input type="range" name="calories" min="1200" max="3000" value="2000" oninput="document.getElementById('calorie-output').textContent = this.value">
+      <p>Target: <span id="calorie-output">2000</span> calories/day</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Meal Frequency</legend>
+      <label><input type="radio" name="frequency" value="3" /> 3 meals</label>
+      <label><input type="radio" name="frequency" value="4" /> 3 meals + 1 snack</label>
+    </fieldset>
+
+    <input type="submit" value="Save Preferences" class="btn-primary" />
+  </form>
+</div>

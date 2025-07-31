@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>Meal Suggestions</h2>
+  <p>Browse meals based on your preferences</p>
+
+  <div class="filter-buttons">
+    <button class="filter active" data-filter="all">All</button>
+    <button class="filter" data-filter="vegetarian">Vegetarian</button>
+    <button class="filter" data-filter="high-protein">High Protein</button>
+  </div>
+
+  <div class="suggestion-grid" id="suggestion-list">
+    <div class="meal-card" data-tags="vegetarian">
+      <h3>Quinoa Bowl</h3>
+      <p>Vegetarian, high protein</p>
+      <form method="POST" action="/api/favorites">
+        <input type="hidden" name="meal_name" value="Quinoa Bowl">
+        <button type="submit" class="favorite">❤️ Add to Favorites</button>
+      </form>
+    </div>
+
+    <div class="meal-card" data-tags="high-protein">
+      <h3>Grilled Chicken Salad</h3>
+      <p>High protein, low carb</p>
+      <form method="POST" action="/api/favorites">
+        <input type="hidden" name="meal_name" value="Grilled Chicken Salad">
+        <button type="submit" class="favorite">❤️ Add to Favorites</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,85 +1,184 @@
-const express = require('express');
-const path = require('path');
-const bcrypt = require('bcrypt');
-const session = require('express-session');
-const db = require('./database');
-const app = express();
-const PORT = 3000;
+const express = require("express");
+const session = require("express-session");
+const path = require("path");
+const bcrypt = require("bcrypt");
+const db = require("./database");
+const expressLayouts = require("express-ejs-layouts");
+const { mockUser, mockMeals, todaysMeals } = require('./mock/mockData');
 
-app.use(express.static('public'));
+const app = express();
+const PORT = 4000;
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(expressLayouts);
+app.set("layout", "partials/layout");
+
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-  secret: 'mealplanner-secret',
+  secret: "mealplanner-secret",
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 
-// Routes for static HTML
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
-app.get('/register.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'register.html')));
-app.get('/dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'dashboard.html')));
-app.get('/preferences.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'preferences.html')));
-app.get('/suggestions.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'suggestions.html')));
-app.get('/generate.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'generate.html')));
-app.get('/weekly.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'weekly.html')));
-
-// Register route
-app.post('/api/register', async (req, res) => {
-  const { username, password } = req.body;
-  const hash = await bcrypt.hash(password, 10);
-  db.run("INSERT INTO users (username, password) VALUES (?, ?)", [username, hash], function (err) {
-    if (err) return res.status(400).json({ error: "User already exists" });
-    req.session.userId = this.lastID;
-    res.json({ message: "Registered", userId: this.lastID });
-  });
-});
-
-// Login route
-app.post('/api/login', (req, res) => {
-  const { username, password } = req.body;
-  db.get("SELECT * FROM users WHERE username = ?", [username], async (err, user) => {
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: "Invalid login" });
-    }
-    req.session.userId = user.id;
-    res.json({ message: "Logged in", userId: user.id });
-  });
-});
-
-// Save preferences
-app.post('/api/preferences', (req, res) => {
-  const { preference } = req.body;
-  const userId = req.session.userId;
-  if (!userId) return res.status(403).send("Not logged in");
-  db.run("INSERT INTO preferences (user_id, preference) VALUES (?, ?)", [userId, preference], (err) => {
-    if (err) return res.status(500).send("DB error");
-    res.send("Preferences saved");
-  });
-});
-
-// Save weekly meal plan
-app.post('/api/weekly', (req, res) => {
-  const userId = req.session.userId;
-  const { meals } = req.body;
-  if (!userId) return res.status(403).send("Not logged in");
-
-  const stmt = db.prepare("INSERT INTO mealplans (user_id, week_start, day, breakfast, lunch, dinner) VALUES (?, ?, ?, ?, ?, ?)");
-  for (const day of meals) {
-    stmt.run(userId, day.week_start, day.day, day.breakfast, day.lunch, day.dinner);
+// ✅ Middleware: make `user` available in all views
+app.use((req, res, next) => {
+  if (req.session.userId) {
+    db.get("SELECT username FROM users WHERE id = ?", [req.session.userId], (err, user) => {
+      res.locals.user = user || null;
+      next();
+    });
+  } else {
+    res.locals.user = null;
+    next();
   }
-  stmt.finalize();
-  res.send("Meal plan saved");
 });
 
-// Get weekly meals
-app.get('/api/weekly', (req, res) => {
-  const userId = req.session.userId;
-  db.all("SELECT * FROM mealplans WHERE user_id = ?", [userId], (err, rows) => {
-    if (err) return res.status(500).send("DB error");
-    res.json(rows);
+// ✅ Render views
+app.get("/", (req, res) => {
+  res.render("index", {
+    title: "Login",
+    error: req.query.error || null,
+    query: req.query
   });
 });
 
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+
+app.get("/register", (req, res) => {
+  res.render("register", {
+    title: "Register",
+    error: req.query.error || null,
+    query: req.query
+  });
+});
+
+
+app.get("/dashboard", (req, res) => {
+  if (!req.session.userId) return res.redirect("/");
+  res.render('dashboard', {
+    title: "Dashboard",
+    user: mockUser,
+    meals: mockMeals,
+    todaysMeals: todaysMeals,
+    query: req.query
+  });
+});
+
+app.get("/preferences", (req, res) => {
+  res.render("preferences", {
+    title: "Preferences",
+    saved: req.query.saved === "true",
+    query: req.query
+  });
+});
+
+app.get("/suggestions", (req, res) => {
+  res.render("suggestions", {
+    title: "Suggestions",
+    query: req.query
+  });
+});
+
+app.get("/generate", (req, res) => {
+  res.render("generate", {
+    title: "Generate",
+    success: req.query.success === "true",
+    query: req.query
+  });
+});
+
+app.get("/recipe", (req, res) => {
+  res.render("recipe", {
+    title: "Recipe",
+    query: req.query
+  });
+});
+
+
+app.get("/weekly", (req, res) => {
+  db.all("SELECT * FROM mealplans WHERE user_id = ?", [req.session.userId], (err, meals) => {
+    res.render("weekly", {
+      title: "Weekly Plan",
+      meals: meals || [],
+      query: req.query
+    });
+  });
+});
+
+
+// ✅ Auth routes
+app.post("/api/register", async (req, res) => {
+  const { username, email, password } = req.body;
+  const hash = await bcrypt.hash(password, 10);
+
+  db.run(
+    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+    [username, email, hash],
+    function (err) {
+      if (err) return res.redirect("/register?error=exists");
+      req.session.userId = this.lastID;
+      res.redirect("/dashboard");
+    }
+  );
+});
+
+
+app.post("/api/login", (req, res) => {
+  const { identifier, password } = req.body;
+
+  if (!identifier || !password) {
+    return res.redirect("/?error=invalid");
+  }
+
+  db.get(
+    "SELECT * FROM users WHERE username = ? OR email = ?",
+    [identifier, identifier],
+    async (err, user) => {
+      if (err) {
+        console.error("Login DB error:", err);
+        return res.redirect("/?error=invalid");
+      }
+
+      if (!user) {
+        console.log("No user found for:", identifier);
+        return res.redirect("/?error=invalid");
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      console.log("Password match:", match);
+
+      if (!match) {
+        return res.redirect("/?error=invalid");
+      }
+
+      req.session.userId = user.id;
+      return res.redirect("/dashboard?welcome=true");
+    }
+  );
+});
+
+
+// ✅ Preferences & Favorites
+app.post("/api/preferences", (req, res) => {
+  const { preference } = req.body;
+  db.run("INSERT INTO preferences (user_id, preference) VALUES (?, ?)", [req.session.userId, preference]);
+  res.redirect("/dashboard");
+});
+
+app.post("/api/favorites", (req, res) => {
+  const { meal_name } = req.body;
+  db.run("INSERT INTO favorites (user_id, meal_name) VALUES (?, ?)", [req.session.userId, meal_name]);
+  res.redirect("/suggestions");
+});
+
+app.use((req, res, next) => {
+  console.log(`➡️  ${req.method} ${req.url}`);
+  next();
+});
+
+
+app.listen(PORT, () => console.log(`✅ Server running at http://localhost:${PORT}`));
+console.log("✅ After app.listen()");
