@@ -1,19 +1,24 @@
-<div class="container">
-  <h2>Your Weekly Plan</h2>
+<section>
+  <h2>Your Weekly Meal Plan</h2>
 
-  <table class="weekly-table">
-    <thead>
-      <tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th></tr>
-    </thead>
-    <tbody>
-      <% meals.forEach(meal => { %>
+  <% if (meals.length === 0) { %>
+    <p>You have not generated a meal plan yet.</p>
+  <% } else { %>
+    <table class="weekly-table">
+      <tr>
+        <th>Day</th>
+        <th>Breakfast</th>
+        <th>Lunch</th>
+        <th>Dinner</th>
+      </tr>
+      <% meals.forEach(row => { %>
         <tr>
-          <td><%= meal.day %></td>
-          <td><%= meal.breakfast %></td>
-          <td><%= meal.lunch %></td>
-          <td><%= meal.dinner %></td>
+          <td><%= row.day %></td>
+          <td><%= row.breakfast %></td>
+          <td><%= row.lunch %></td>
+          <td><%= row.dinner %></td>
         </tr>
-      <% }) %>
-    </tbody>
-  </table>
-</div>
+      <% }); %>
+    </table>
+  <% } %>
+</section>

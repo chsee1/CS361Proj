@@ -1,8 +1,4 @@
 <section class="welcome">
-  <% if (query.welcome === "true") { %>
-    <div class="success-banner">🎉 Account created successfully!</div>
-  <% } %>
-
   <h2>Hi, <%= user.username %>!</h2>
   <p>Welcome back to your meal planning dashboard.</p>
 </section>
@@ -45,23 +41,53 @@
     </div>
   </div>
 
-  <!-- Today's Meals -->
-  <div class="card todays-meals">
-    <div class="card-header">
-      <h3>Today's Meals</h3>
-      <span class="date-label">Wednesday, June 12</span>
-    </div>
-    <div class="meal-grid">
-    <% todaysMeals.forEach(meal => { %>
+  <% 
+  const b = meals.find(m => m.type === "Breakfast");
+  const l = meals.find(m => m.type === "Lunch");
+  const d = meals.find(m => m.type === "Dinner");
+%>
+<div class="card todays-meals">
+  <h3>Today's Meals</h3>
+  <div class="meal-grid">
+    <% [b, l, d].forEach(meal => { %>
       <div class="meal-card">
-        <small><%= meal.mealType %></small>
-        <img src="<%= meal.image %>" alt="<%= meal.title %>">
-        <h4><%= meal.title %></h4>
-        <p><%= meal.calories %> cal</p>
-        <p><%= meal.protein %> protein</p>
+        <small><%= meal.type %></small>
+        <a href="/recipe?id=<%= meal.id %>" class="meal-card">
+          <img src="<%= meal.image %>" alt="<%= meal.name %>">
+          <h4><%= meal.name %></h4>
+          <p><%= meal.calories %> cal</p>
+          <p><%= meal.protein %>g protein</p>
+        </a>
       </div>
-    <% }) %>
+    <% }); %>
   </div>
-  </div>
+</div>
+
+
+
+<!-- Favorite Meals Section -->
+<div class="card dashboard-card full-width">
+  <h3>Favorite Meals</h3>
+
+  <% if (recentFavorites && recentFavorites.length > 0) { %>
+    <div class="meal-grid">
+      <% recentFavorites.forEach(fav => { %>
+        <div class="meal-card">
+          <a href="/recipe?id=<%= fav.id %>" class="meal-card">
+          <img src="<%= fav.image %>" alt="<%= fav.name %>">
+          <h4><%= fav.name %></h4>
+          <p><%= fav.calories %> cal</p>
+          <p><%= fav.protein %>g protein</p>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p>You have no favorites right now! Favorite a meal to see it here.</p>
+  <% } %>
+</div>
+
+</div>
+
 
 </section>

@@ -1,23 +1,25 @@
 <div class="login-container">
-  <h1>Create Your Account</h1>
+  <h1>Register</h1>
+  <p class="subtitle">Create your free account</p>
 
-  <% if (error === 'exists') { %>
-    <div class="error-banner">⚠️ Username already exists</div>
+  <% if (error) { %>
+    <div class="error-banner">❌ Username or email already in use</div>
   <% } %>
 
-<form method="POST" action="/api/register" class="register">
-  <label for="username">Username</label>
-  <input type="text" name="username" required />
+  <form class="register" method="POST" action="/api/register">
+    <label for="username">Username</label>
+    <input type="text" name="username" required />
 
-  <label for="email">Email</label>
-  <input type="email" name="email" required />
+    <label for="email">Email</label>
+    <input type="text" name="email" required />
 
-  <label for="password">Password</label>
-  <input type="password" name="password" required />
+    <label for="password">Password</label>
+    <input type="password" name="password" required />
 
-  <button type="submit" class="login-btn">Register</button>
-</form>
+    <button type="submit" class="login-btn">Sign Up</button>
+  </form>
 
-
-  <p class="signup-link">Already have an account? <a href="/">Login</a></p>
+  <div class="signup-link">
+    Already have an account? <a href="/">Log in here</a>
+  </div>
 </div>

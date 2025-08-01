@@ -11,10 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.2.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",
-    "express-session": "^1.18.2",
-    "sqlite3": "^5.1.7"
+    "express-layouts": "^1.0.0",
+    "express-session": "^1.18.2"
   }
 }

@@ -1,17 +1,23 @@
 <div class="login-container">
-  <h1><span class="logo-icon">🥗</span> MealPlanApp</h1>
-  <h2>Welcome Back</h2>
-  <p class="subtitle">Sign in to access your meal plans</p>
+  <h1>Welcome to MealPlanner</h1>
+  <h2>Log in to your account</h2>
+  <p class="subtitle">Please enter your credentials</p>
 
-  <form method="POST" action="/api/login" class="login">
-    <label for="identifier">Username or Email</label>
+  <% if (error) { %>
+    <div class="error-banner">❌ Invalid login</div>
+  <% } %>
+
+  <form class="login" method="POST" action="/api/login">
+    <label for="identifier">Email or Username</label>
     <input type="text" name="identifier" required />
 
     <label for="password">Password</label>
     <input type="password" name="password" required />
 
-    <button type="submit" class="login-btn">Login</button>
-  </form>
+    <div class="actions">
+      <a href="/register">Create Account</a>
+    </div>
 
-  <p class="signup-link">Don’t have an account? <a href="/register">Sign Up</a></p>
+    <button type="submit" class="login-btn">Log In</button>
+  </form>
 </div>
