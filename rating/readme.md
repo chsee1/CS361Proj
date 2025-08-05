@@ -54,9 +54,9 @@ fetch("http://localhost:4000/api/ratings/101")
 ```
 To Start:
 
-Clone the repo: git clone https://github.com/chsee1/CS361Proj/tree/main/rating
-Install the dependences: npm install
-node server.js
+# Clone the repo: git clone https://github.com/chsee1/CS361Proj/tree/main/rating
+# Install the dependences: npm install
+# node server.js
 
 The server is now ready for requests.
 
