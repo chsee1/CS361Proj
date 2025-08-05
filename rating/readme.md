@@ -21,7 +21,7 @@ http://localhost:4000/api/ratings
   "userId": 1001,
   "stars": 5
 }
-
+```
 
 drivewayId: integer (required)
 
@@ -37,7 +37,7 @@ fetch("http://localhost:4000/api/ratings", {
 });
 
 
-User Story 2 - Get Ratings Summary:
+## User Story 2 - Get Ratings Summary:
 Response:
 
 json:
