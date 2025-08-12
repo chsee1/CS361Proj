@@ -6,7 +6,7 @@
     <div class="error-banner">❌ Username or email already in use</div>
   <% } %>
 
-  <form class="register" method="POST" action="/api/register">
+  <form class="register" onsubmit="event.preventDefault(); window.location.href = '/dashboard';">
     <label for="username">Username</label>
     <input type="text" name="username" required />
 

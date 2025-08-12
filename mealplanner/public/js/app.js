@@ -108,6 +108,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // ========== Dashboard Quote ==========
+  // Fetch and display quote in dashboard
+  const quoteText = document.getElementById("quote-text");
+  if (quoteText) {
+    fetch("/api/quote")
+      .then(res => res.json())
+      .then(data => {
+        quoteText.textContent = data.quote;
+      })
+      .catch(() => {
+        quoteText.textContent = "You’re doing amazing — keep it up!";
+      });
+  }
+
+
+
+
   // ========== Preferences Form ==========
   const preferencesForm = document.querySelector("form.preferences");
   if (preferencesForm) {

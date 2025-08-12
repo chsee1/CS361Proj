@@ -1,22 +1,23 @@
-<% 
-  const breakfast = meals.find(m => m.type === "Breakfast");
-  const lunch = meals.find(m => m.type === "Lunch");
-  const dinner = meals.find(m => m.type === "Dinner");
-%>
 
 <h3>This Week's Generated Plan</h3>
-<table class="weekly-table">
-  <thead>
-    <tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th></tr>
-  </thead>
-  <tbody>
-    <% ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(day => { %>
-      <tr>
-        <td><%= day %></td>
-        <td><%= breakfast.name %></td>
-        <td><%= lunch.name %></td>
-        <td><%= dinner.name %></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+
+<% if (meals.length === 0) { %>
+  <p>No meals matched your preferences. Try relaxing some filters.</p>
+<% } else { %>
+  <table class="weekly-table">
+    <thead>
+      <tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th></tr>
+    </thead>
+    <tbody>
+      <% meals.forEach(row => { %>
+        <tr>
+          <td><%= row.day %></td>
+          <td><%= row.breakfast %></td>
+          <td><%= row.lunch %></td>
+          <td><%= row.dinner %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+

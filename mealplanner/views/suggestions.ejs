@@ -8,11 +8,38 @@
         <h3><%= meal.name %></h3>
         <p><%= meal.calories %> cal</p>
         </a>
-        <form>
-          <input type="hidden" name="meal_name" value="<%= meal.name %>">
-          <button type="submit" class="favorite">❤️ Add to Favorite</button>
-        </form>
+        <form class="add-favorite-form" data-id="<%= meal.id %>" data-name="<%= meal.name %>" data-image="<%= meal.image %>" data-calories="<%= meal.calories %>" data-protein="<%= meal.protein %>">
+  <button type="submit" class="favorite">❤️ Add to Favorite</button>
+</form>
       </div>
     <% }); %>
   </div>
 </section>
+<script>
+document.querySelectorAll(".add-favorite-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const userId = 1; // Replace with session ID later
+
+    const meal = {
+      id: parseInt(form.dataset.id),
+      name: form.dataset.name,
+      image: form.dataset.image,
+      calories: parseInt(form.dataset.calories),
+      protein: parseInt(form.dataset.protein)
+    };
+
+    const res = await fetch(`/api/favorites/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(meal)
+    });
+
+    if (res.ok) {
+      alert("✅ Added to favorites!");
+    } else {
+      alert("❌ Failed to add favorite.");
+    }
+  });
+});
+</script>

@@ -5,7 +5,7 @@
     <div class="success-banner">✅ Preferences saved successfully</div>
   <% } %>
 
-  <form class="preferences-form">
+  <form class="preferences-form" id="preferences-form">
     <fieldset>
       <legend>Diet Types</legend>
       <div class="grid-checkbox">
@@ -39,3 +39,67 @@
     <input type="submit" value="Save Preferences" class="btn-primary" />
   </form>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.getElementById("preferences-form");
+  const userId = 1; // Hardcoded for now
+
+  // Prefill preferences on load
+  try {
+    const res = await fetch(`/api/preferences/${userId}`);
+    if (res.ok) {
+      const prefs = await res.json();
+
+      // Set diets
+      document.querySelectorAll("input[name='diet[]']").forEach(input => {
+        input.checked = prefs.diet?.includes(input.value);
+      });
+
+      // Set allergies
+      document.querySelectorAll("input[name='allergy[]']").forEach(input => {
+        input.checked = prefs.allergy?.includes(input.value);
+      });
+
+      // Calories
+      if (prefs.calories) {
+        document.querySelector("input[name='calories']").value = prefs.calories;
+        document.getElementById("calorie-output").textContent = prefs.calories;
+      }
+
+      // Frequency
+      if (prefs.frequency) {
+        document.querySelectorAll("input[name='frequency']").forEach(input => {
+          input.checked = input.value === prefs.frequency;
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Failed to load preferences:", err);
+  }
+
+  // Save preferences on submit
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const diet = [...form.querySelectorAll("input[name='diet[]']:checked")].map(i => i.value);
+    const allergy = [...form.querySelectorAll("input[name='allergy[]']:checked")].map(i => i.value);
+    const calories = parseInt(form.querySelector("input[name='calories']").value);
+    const frequency = form.querySelector("input[name='frequency']:checked")?.value || "";
+
+    const payload = { diet, allergy, calories, frequency };
+
+    const res = await fetch(`/api/preferences/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      window.location.href = "/preferences?saved=true";
+    } else {
+      alert("Failed to save preferences");
+    }
+  });
+});
+</script>

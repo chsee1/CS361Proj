@@ -344,7 +344,7 @@ const mockMeals = [
     rating: 4.6,
     ingredients: ["shrimp", "broccoli", "bell peppers", "soy sauce", "ginger"],
     steps: ["Sauté shrimp and veggies with sauce."],
-    image: '/images/shrimp_strifry.jpg',
+    image: '/images/shrimp_stirfry.jpg',
   }
 ];
 

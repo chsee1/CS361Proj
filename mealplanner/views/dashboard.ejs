@@ -7,6 +7,10 @@
 
   <!-- Top Row: Weekly Progress + Quick Actions -->
   <div class="dashboard-top-row">
+    <div id="quote-box" >
+      <p id="quote-text"></p>
+    </div>
+
     <!-- Weekly Progress -->
     <div class="card">
       <h3>Weekly Progress</h3>
@@ -78,6 +82,9 @@
           <h4><%= fav.name %></h4>
           <p><%= fav.calories %> cal</p>
           <p><%= fav.protein %>g protein</p>
+          <form class="remove-favorite-form" data-id="<%= fav.id %>">
+          <button type="submit" class="btn-secondary">Remove</button>
+          </form>
           </a>
         </div>
       <% }) %>
@@ -91,3 +98,24 @@
 
 
 </section>
+
+<script>
+document.querySelectorAll(".remove-favorite-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const mealId = form.dataset.id;
+    const userId = 1; // static for now
+
+    const res = await fetch(`/api/favorites/${userId}/${mealId}`, {
+      method: "DELETE"
+    });
+
+    if (res.ok) {
+      alert("✅ Favorite removed");
+      window.location.reload();
+    } else {
+      alert("❌ Failed to remove favorite");
+    }
+  });
+});
+</script>
