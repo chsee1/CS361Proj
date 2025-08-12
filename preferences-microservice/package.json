@@ -1,0 +1,15 @@
+{
+  "name": "preferences-service",
+  "version": "1.0.0",
+  "description": "Microservice for storing and retrieving user dietary preferences",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "MealPlanner Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
